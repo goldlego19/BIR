@@ -49,11 +49,71 @@ create table Staging.RawCustomers(
 
 
 -- Create the Staging.RawProducts staging table
+CREATE TABLE Staging.RawProducts (
+ ProductID NVARCHAR(50),
+ ProductName NVARCHAR(50),
+ Brand NVARCHAR(50),
+ Category NVARCHAR(50),
+ SubCategory NVARCHAR(50),
+ CurrentPrice NVARCHAR(50)
+);
+
 -- Create the Staging.RawSales staging table
+CREATE TABLE Staging.RawSales (
+ OrderID NVARCHAR(50),
+ OrderDate NVARCHAR(50),
+ ProductID NVARCHAR(50),
+ CustomerID NVARCHAR(50),
+ StoreID NVARCHAR(50),
+ Quantity NVARCHAR(50),
+ UnitPriceSold NVARCHAR(50),
+ LineTotal NVARCHAR(50)
+);
+
 -- Create the Staging.RawStores staging table
+CREATE TABLE Staging.RawStores (
+ 	StoreId NVARCHAR(50),
+ 	StoreName NVARCHAR(100),
+ 	City NVARCHAR(50),
+ 	Country NVARCHAR(50),
+ 	Region NVARCHAR(50),
+ 	Managername NVARCHAR(100),
+ 	
+);
+
 -- Create the Staging.RawReviews staging table
+CREATE TABLE Staging.RawReviews (
+ ReviewID NVARCHAR(50),
+ ProductID NVARCHAR(50),
+ UserID NVARCHAR(50),
+ Rating NVARCHAR(50),
+ ReviewDate NVARCHAR(50),
+ Tag NVARCHAR(50)
+);
 
 -- Remember there is no need to create a staging table for date or time, these are automatically generated through code 
+
+-- Step 3 - Create the ETL LOG Table - this table will store information about each process. this is not a staging table, use suitable constraints
+
+Create Table dbo.ETLLog(
+	LogID INT IDENTITY(1,1) PRIMARY KEY,
+	ProcedureName NVARCHAR(100) NOT NULL,
+	StartTime DATETIME NOT NULL,
+	EndTime DATETIME NULL, -- filled in later
+	RowsAffected INT NULL,
+	STATUS NVARCHAR(50) NOT NULL, --Sucecess, Failure, Running
+	ErrorMessage NVARCHAR(MAX) NULL,
+	ExecutionTimeSeconds AS DATEDIFF(SECOND, StartTime, EndTime)
+);
+
+Create Table dbo.ETLConfig(
+	ConfigKey NVARCHAR(50) Primary Key,
+	ConfigValue NVARCHAR(200) NOT NULL,
+	Description NVARCHAR(500) NULL,
+	LastModified DATETIME DEFAULT GETDATE()
+);
+
+
 
 
 
